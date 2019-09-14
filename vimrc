@@ -1,6 +1,17 @@
-" WELCOME TO THE JUNGLE
+" File located at C - users - Hamed - .vimrc
 
 " ---------------------- Pathogen plugins - START
+"
+" List of plugins used:
+" + dracula
+" + nerdtree
+" + syntactic
+" + vim-airline
+" + vim-airline-themes
+" + vim-color-solarized (paused)
+" + vim-easymotion
+"
+
 execute pathogen#infect()
 filetype plugin indent on
 
@@ -30,6 +41,13 @@ let g:syntastic_check_on_wq = 0
 syntax enable
 colorscheme dracula
 
+" EasyMotion plugin 
+" ----> use \\ char to look for char below cursor
+" ----> use leader leader (\\) 's' to search for words
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 " ---------------------- Pathogen Plugins - END
 
@@ -39,9 +57,27 @@ colorscheme dracula
 :set guioptions -=r
 :set guioptions -=L
 
+" Set gvim to set window size to lines in files
+au BufRead * let &numberwidth = float2nr(log10(line("$"))) + 2
+          \| let &columns = &numberwidth + 80
+
 
 " undo levels maximum number of changes that can be undone
 set ul=1000
+
+"Save file with C-s ... coz ZZ can get F£CKED!
+" If the current buffer has never been saved, it will have no name,
+" call the file browser to save it, otherwise just save it.
+command -nargs=0 -bar Update if &modified 
+                           \|    if empty(bufname('%'))
+                           \|        browse confirm write
+                           \|    else
+                           \|        confirm write
+                           \|    endif
+                           \|endif
+nnoremap <silent> <C-S> :<C-u>Update<CR>
+inoremap <c-s> <c-o>:Update<CR>
+
 
 " ctrl backspace to delete previous word
 imap <C-BS> <C-W>
